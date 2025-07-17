@@ -4,12 +4,12 @@ variable "subscription_id" {
 }
 
 variable "resource_group_name" {
-  description = "Nombre del grupo de recursos"
+  description = "Nombre del grupo de recursos existente"
   type        = string
 }
 
 variable "location" {
-  description = "Región de Azure"
+  description = "Ubicación del grupo de recursos"
   type        = string
   default     = "eastus"
 }
