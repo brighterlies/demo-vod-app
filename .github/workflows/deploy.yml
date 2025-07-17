@@ -62,11 +62,17 @@ jobs:
           az aks get-credentials --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.AKS_NAME }}
           kubectl set image deployment/demo-vod-app demo-vod-app=${{ secrets.ACR_NAME }}.azurecr.io/demo-vod-app:${{ github.sha }}
 
-      - name: Aplicar Terraform (opcional)
-        run: |
-          terraform init
-          terraform apply -auto-approve \
-            -var="subscription_id=${{ secrets.SUBSCRIPTION_ID }}" \
-            -var="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
-            -var="aks_name=${{ secrets.AKS_NAME }}" \
-            -var="acr_name=${{ secrets.ACR_NAME }}"
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Inicializar Terraform
+        run: terraform init
+
+      - name: Aplicar Terraform
+        run: terraform apply -auto-approve \
+          -var="subscription_id=${{ secrets.SUBSCRIPTION_ID }}" \
+          -var="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
+          -var="aks_name=${{ secrets.AKS_NAME }}" \
+          -var="acr_name=${{ secrets.ACR_NAME }}"
