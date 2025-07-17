@@ -1,6 +1,6 @@
 # Plataforma VOD - Infraestructura Cloud y DevOps
 
-Este proyecto corresponde a la Evaluación del Módulo 6 del curso DevOps, donde se diseña e implementa la infraestructura cloud para una plataforma de video bajo demanda (VOD).
+Este proyecto corresponde a la Evaluación Final del Módulo 6 del curso DevOps, donde se diseña e implementa la infraestructura cloud para una plataforma de video bajo demanda (VOD).
 
 ## 🧱 Tecnologías utilizadas
 
