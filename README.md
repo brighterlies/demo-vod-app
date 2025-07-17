@@ -41,3 +41,6 @@ Este proyecto corresponde a la Evaluación Final del Módulo 6 del curso DevOps,
 - `RESOURCE_GROUP`
 - `AKS_NAME`
 - `ACR_NAME`
+
+## ⚠️ Terraform desactivado en el workflow
+El paso `terraform apply` fue comentado porque los recursos ya estaban creados en Azure y aplicar Terraform desde GitHub generaba errores. Se usó el estado local para evitar conflictos y continuar con el despliegue.
