@@ -24,3 +24,49 @@ jobs:
 
       - name: Ejecutar Pruebas
         run: npm run test
+
+  build-and-deploy:
+    name: 2. Construir y Desplegar Aplicación
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout del Código
+        uses: actions/checkout@v3
+
+      - name: Iniciar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Instalar Dependencias
+        run: npm install
+
+      - name: Construir Imagen Docker
+        run: docker build -t demo-vod-app:${{ github.sha }} .
+
+      - name: Autenticarse en Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Subir Imagen a Azure Container Registry
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+          docker tag demo-vod-app:${{ github.sha }} ${{ secrets.ACR_NAME }}.azurecr.io/demo-vod-app:${{ github.sha }}
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/demo-vod-app:${{ github.sha }}
+
+      - name: Desplegar en AKS
+        run: |
+          az aks get-credentials --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.AKS_NAME }}
+          kubectl set image deployment/demo-vod-app demo-vod-app=${{ secrets.ACR_NAME }}.azurecr.io/demo-vod-app:${{ github.sha }}
+
+      - name: Aplicar Terraform (opcional)
+        run: |
+          terraform init
+          terraform apply -auto-approve \
+            -var="subscription_id=${{ secrets.SUBSCRIPTION_ID }}" \
+            -var="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
+            -var="aks_name=${{ secrets.AKS_NAME }}" \
+            -var="acr_name=${{ secrets.ACR_NAME }}"

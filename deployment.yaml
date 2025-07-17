@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-vod-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-vod-app
+  template:
+    metadata:
+      labels:
+        app: demo-vod-app
+    spec:
+      containers:
+        - name: demo-vod-app
+          image: <ACR_NAME>.azurecr.io/demo-vod-app:latest
+          ports:
+            - containerPort: 3000
