@@ -71,8 +71,4 @@ jobs:
         run: terraform init
 
       - name: Aplicar Terraform
-        run: terraform apply -auto-approve \
-          -var="subscription_id=${{ secrets.SUBSCRIPTION_ID }}" \
-          -var="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
-          -var="aks_name=${{ secrets.AKS_NAME }}" \
-          -var="acr_name=${{ secrets.ACR_NAME }}"
+        run: terraform apply -auto-approve -var="subscription_id=${{ secrets.SUBSCRIPTION_ID }}" -var="resource_group_name=${{ secrets.RESOURCE_GROUP }}" -var="aks_name=${{ secrets.AKS_NAME }}" -var="acr_name=${{ secrets.ACR_NAME }}"
